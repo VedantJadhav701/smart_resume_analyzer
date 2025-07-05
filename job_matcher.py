@@ -59,3 +59,19 @@ def load_jobs_from_api(query="machine learning engineer in india", pages=2):
             st.error(f"❌ API request error: {e}")
 
     return pd.DataFrame(all_jobs)
+
+def match_jobs(resume_skills, jobs):
+    """
+    Matches resume skills to jobs.
+    Args:
+        resume_skills (list): List of skills from the resume.
+        jobs (list): List of job dicts with 'skills' key.
+    Returns:
+        list: Jobs that match the resume skills.
+    """
+    matched = []
+    for job in jobs:
+        job_skills = set(job.get('skills', []))
+        if job_skills.intersection(resume_skills):
+            matched.append(job)
+    return matched
