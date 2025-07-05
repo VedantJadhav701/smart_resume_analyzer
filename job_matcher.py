@@ -3,6 +3,7 @@ import requests
 import streamlit as st
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
+from job_matcher import load_jobs_from_api, match_jobs
 
 
 def get_country_code(location: str) -> str:
