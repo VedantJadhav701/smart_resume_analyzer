@@ -1,0 +1,8 @@
+# Ignore Python cache and virtual environments
+__pycache__/
+*.py[cod]
+venv/
+.env
+
+# Streamlit secrets (keep API keys safe!)
+.streamlit/secrets.toml
