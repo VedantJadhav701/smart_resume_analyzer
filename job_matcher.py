@@ -1,8 +1,8 @@
 import pandas as pd
 import requests
 import streamlit as st
-from sklearn.feature_extraction.text import TfidfVectorizer
-from sklearn.metrics.pairwise import cosine_similarity
+from collections import Counter
+import math
 
 # ✅ Load jobs from RapidAPI (live)
 def load_jobs_from_api(query="machine learning engineer in india", pages=2):
@@ -42,16 +42,23 @@ def load_jobs_from_api(query="machine learning engineer in india", pages=2):
 
     return pd.DataFrame(all_jobs)
 
-# ✅ Match resume text to job descriptions using cosine similarity
+# ✅ Pure Python cosine similarity
+def cosine_similarity(text1, text2):
+    vec1 = Counter(text1.lower().split())
+    vec2 = Counter(text2.lower().split())
+
+    intersection = set(vec1) & set(vec2)
+    numerator = sum(vec1[x] * vec2[x] for x in intersection)
+
+    sum1 = sum(v ** 2 for v in vec1.values())
+    sum2 = sum(v ** 2 for v in vec2.values())
+    denominator = math.sqrt(sum1) * math.sqrt(sum2)
+
+    return float(numerator) / denominator if denominator else 0.0
+
+# ✅ Match jobs using pure Python similarity
 def match_jobs(resume_text, jobs_df, top_n=5):
     jobs_df = jobs_df.copy()
-    job_descriptions = jobs_df['description_text'].fillna("")
-
-    tfidf = TfidfVectorizer(stop_words='english')
-    tfidf_matrix = tfidf.fit_transform([resume_text] + job_descriptions.tolist())
-
-    similarity_scores = cosine_similarity(tfidf_matrix[0:1], tfidf_matrix[1:]).flatten()
-    jobs_df['score'] = similarity_scores
-
-    matched_jobs = jobs_df.sort_values(by='score', ascending=False).head(top_n)
-    return matched_jobs[['job_title', 'company_name', 'location', 'apply_link', 'score']]
+    jobs_df["score"] = jobs_df["description_text"].fillna("").apply(lambda desc: cosine_similarity(resume_text, desc))
+    matched_jobs = jobs_df.sort_values(by="score", ascending=False).head(top_n)
+    return matched_jobs[["job_title", "company_name", "location", "apply_link", "score"]]
