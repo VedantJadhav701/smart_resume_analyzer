@@ -1,13 +1,15 @@
-import fitz  # PyMuPDF
+import pdfplumber
 import spacy
 
 nlp = spacy.load("en_core_web_sm")
 
-def extract_text_from_pdf(pdf_file):
+def extract_text_from_pdf(uploaded_file):
     text = ""
-    doc = fitz.open(stream=pdf_file.read(), filetype="pdf")
-    for page in doc:
-        text += page.get_text()
+    with pdfplumber.open(uploaded_file) as pdf:
+        for page in pdf.pages:
+            page_text = page.extract_text()
+            if page_text:
+                text += page_text + "\n"
     return text
 
 def extract_skills(text, skill_keywords):
