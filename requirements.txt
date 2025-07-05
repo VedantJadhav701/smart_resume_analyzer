@@ -3,5 +3,5 @@ pandas
 requests
 scikit-learn
 PyPDF2
-transformers
-torch
+transformers==4.40.1
+torch==2.2.2
