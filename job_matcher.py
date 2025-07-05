@@ -22,19 +22,21 @@ def load_jobs_from_api(query="machine learning engineer in india", pages=2):
         "x-rapidapi-key": st.secrets["rapidapi_key"]
     }
 
-    country_code = get_country_code(query)
+    country_code = get_country_code(query).upper()
 
     all_jobs = []
 
     for page in range(1, pages + 1):
         params = {
-            "query": query,
+            "query": query,  # Should be a non-empty string
             "page": str(page),
             "num_pages": "1",
-            "country": country_code,
+            "country": country_code.upper(),  # Use uppercase country code
             "date_posted": "all",
             "language": "en"
         }
+
+        print("Requesting jobs with params:", params)  # Debugging line
 
         try:
             response = requests.get(url, headers=headers, params=params)
