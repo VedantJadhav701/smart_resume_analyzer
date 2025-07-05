@@ -29,7 +29,7 @@ if uploaded_file:
 
     # Load jobs from live API
     query = f"{job_query} in {location}"
-    jobs_df = load_jobs_from_api(query=query, pages=pages)
+    jobs_df = load_jobs_from_api(query=query, pages=pages, skill_keywords=skill_keywords)
 
     matched_jobs = match_jobs(resume_text, jobs_df)
     st.dataframe(matched_jobs)

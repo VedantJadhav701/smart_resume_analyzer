@@ -3,7 +3,6 @@ import requests
 import streamlit as st
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
-from resume_parser import extract_skills
 
 
 def get_country_code(location: str) -> str:
@@ -17,7 +16,9 @@ def get_country_code(location: str) -> str:
     else:
         return "us"  # default fallback
 
-def load_jobs_from_api(query="machine learning engineer in india", pages=2):
+def load_jobs_from_api(query="machine learning engineer in india", pages=2, skill_keywords=None):
+    if skill_keywords is None:
+        skill_keywords = {'python', 'sql', 'excel', 'ml', 'nlp', 'flask', 'django', 'javascript'}
     url = "https://jsearch.p.rapidapi.com/search"
     headers = {
         "x-rapidapi-host": "jsearch.p.rapidapi.com",
@@ -49,8 +50,7 @@ def load_jobs_from_api(query="machine learning engineer in india", pages=2):
             jobs = response.json().get("data", [])
             for job in jobs:
                 description = job.get("job_description", "")
-                # Extract skills from description (implement extract_skills as needed)
-                skills = extract_skills(description)
+                skills = extract_skills(description, skill_keywords)
                 all_jobs.append({
                     "job_id": job.get("job_id"),
                     "job_title": job.get("job_title"),
@@ -60,7 +60,7 @@ def load_jobs_from_api(query="machine learning engineer in india", pages=2):
                     "job_type": ", ".join(job.get("job_employment_types", [])),
                     "date_posted": job.get("job_posted_at_datetime_utc", ""),
                     "apply_link": job.get("job_apply_link", ""),
-                    "skills": skills  # Add this line
+                    "skills": skills
                 })
 
         except Exception as e:
@@ -83,3 +83,6 @@ def match_jobs(resume_skills, jobs):
         if job_skills.intersection(resume_skills):
             matched.append(job)
     return matched
+
+def extract_skills(text, skill_keywords):
+    # ...function body...
