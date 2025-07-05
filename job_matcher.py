@@ -44,15 +44,19 @@ def load_jobs_from_api(query="machine learning engineer in india", pages=2):
 
             jobs = response.json().get("data", [])
             for job in jobs:
+                description = job.get("job_description", "")
+                # Extract skills from description (implement extract_skills as needed)
+                skills = extract_skills(description)
                 all_jobs.append({
                     "job_id": job.get("job_id"),
                     "job_title": job.get("job_title"),
                     "company_name": job.get("employer_name"),
                     "location": f"{job.get('job_city', '')}, {job.get('job_country', '')}",
-                    "description_text": job.get("job_description", ""),
+                    "description_text": description,
                     "job_type": ", ".join(job.get("job_employment_types", [])),
                     "date_posted": job.get("job_posted_at_datetime_utc", ""),
-                    "apply_link": job.get("job_apply_link", "")
+                    "apply_link": job.get("job_apply_link", ""),
+                    "skills": skills  # Add this line
                 })
 
         except Exception as e:
