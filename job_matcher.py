@@ -85,4 +85,4 @@ def match_jobs(resume_skills, jobs):
     return matched
 
 def extract_skills(text, skill_keywords):
-    # ...function body...
+    pass  # TODO: Implement or import the real function
