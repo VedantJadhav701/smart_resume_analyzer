@@ -3,6 +3,8 @@ import requests
 import streamlit as st
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
+from resume_parser import extract_skills
+
 
 def get_country_code(location: str) -> str:
     if "india" in location.lower():
