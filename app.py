@@ -31,7 +31,10 @@ if uploaded_file:
     query = f"{job_query} in {location}"
     jobs_df = load_jobs_from_api(query=query, pages=pages, skill_keywords=skill_keywords)
 
-    matched_jobs = match_jobs(resume_text, jobs_df)
+    # FIX: Use extracted skills and convert jobs_df to list of dicts
+    resume_skills = skills
+    jobs_list = jobs_df.to_dict(orient="records")
+    matched_jobs = match_jobs(resume_skills, jobs_list)
     st.dataframe(matched_jobs)
 
     st.subheader("📌 Resume Feedback (LLM Style)")
