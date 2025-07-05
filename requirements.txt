@@ -1,8 +1,7 @@
-streamlit==1.32.2
-PyMuPDF==1.23.22
-spacy==3.7.4
-pandas==2.2.2
-scikit-learn==1.4.2
-sentence-transformers==2.6.1
-transformers==4.41.1
-torch>=2.1.0
+streamlit==1.32.0
+pandas
+requests
+scikit-learn
+PyPDF2
+transformers
+torch
