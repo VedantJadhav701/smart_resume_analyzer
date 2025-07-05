@@ -5,4 +5,4 @@ scikit-learn
 pdfplumber==0.10.3
 spacy
 transformers==4.40.1
-torch==2.2.2
+torch==2.1.2
